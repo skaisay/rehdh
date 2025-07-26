@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструкции для мобильного доступа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .step {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+        .warning {
+            background: #fff3e0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+        .success {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .url {
+            background: #333;
+            color: #0ff;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            text-align: center;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Настройка мобильного доступа к приложению</h1>
+        
+        <div class="warning">
+            <h3>⚠️ Проблема с подключением</h3>
+            <p>Если приложение не открывается на телефоне, проблема в настройках брандмауэра Windows.</p>
+        </div>
+
+        <h2>📱 Ссылки для телефона:</h2>
+        
+        <div class="url">http://192.168.32.2:5500/trhrth-main/index.html</div>
+        <div class="url">http://192.168.32.2:5500/index.html</div>
+        <div class="url">http://192.168.32.2:5500/</div>
+
+        <h2>🛠️ Пошаговые инструкции:</h2>
+
+        <div class="step">
+            <h3>Шаг 1: Открыть настройки брандмауэра</h3>
+            <ol>
+                <li>Нажмите <code>Win + R</code></li>
+                <li>Введите: <code>wf.msc</code></li>
+                <li>Нажмите Enter</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>Шаг 2: Создать правило для входящих подключений</h3>
+            <ol>
+                <li>В левой панели выберите <strong>"Правила для входящих подключений"</strong></li>
+                <li>В правой панели нажмите <strong>"Создать правило..."</strong></li>
+                <li>Выберите <strong>"Порт"</strong> → Далее</li>
+                <li>Выберите <strong>"TCP"</strong></li>
+                <li>Введите порт: <code>5500</code></li>
+                <li>Нажмите Далее → Далее → Далее</li>
+                <li>Имя правила: <code>Live Server Port 5500</code></li>
+                <li>Нажмите <strong>"Готово"</strong></li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>Шаг 3: Проверить подключение</h3>
+            <ol>
+                <li>Убедитесь, что Live Server запущен в VS Code</li>
+                <li>Телефон подключен к той же Wi-Fi сети</li>
+                <li>Откройте браузер на телефоне</li>
+                <li>Введите одну из ссылок выше</li>
+            </ol>
+        </div>
+
+        <div class="success">
+            <h3>✅ Альтернативное решение</h3>
+            <p>Если брандмауэр настроить сложно, временно отключите его:</p>
+            <ol>
+                <li>Перейдите в <strong>Панель управления → Система и безопасность → Брандмауэр Защитника Windows</strong></li>
+                <li>Нажмите <strong>"Включение и отключение брандмауэра Защитника Windows"</strong></li>
+                <li>Временно отключите для частной сети</li>
+                <li><strong>Не забудьте включить обратно после тестирования!</strong></li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <h3>🔍 Проверка сети</h3>
+            <p>Убедитесь, что:</p>
+            <ul>
+                <li>Компьютер и телефон в одной Wi-Fi сети</li>
+                <li>IP адрес компьютера: <code>192.168.32.2</code></li>
+                <li>Live Server запущен в VS Code</li>
+                <li>Показывается статус "Go Live" или "Port: 5500"</li>
+            </ul>
+        </div>
+
+        <h2>🏠 Возврат к приложению</h2>
+        <p><a href="index.html" style="color: #2196f3; text-decoration: none; font-weight: bold;">← Вернуться к основному приложению</a></p>
+    </div>
+</body>
+</html>

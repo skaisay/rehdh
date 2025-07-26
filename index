@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0;url=./index.html">
+    <title>Stats Tracker - Redirecting...</title>
+</head>
+<body>
+    <script>
+        // Немедленное перенаправление
+        window.location.replace('./index.html');
+    </script>
+    <p>Перенаправление на приложение...</p>
+</body>
+</html>

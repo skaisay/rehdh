@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Stats Tracker PWA - Mobile Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        .demo-container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .device-frame {
+            width: 375px;
+            height: 667px;
+            border: 8px solid #333;
+            border-radius: 25px;
+            background: #000;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+        }
+        .device-screen {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .instructions {
+            margin: 20px 0;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .feature-list {
+            text-align: left;
+            margin: 10px 0;
+        }
+        .feature-list li {
+            margin: 5px 0;
+            padding-left: 10px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: rgba(0,255,0,0.2); }
+        .info { background: rgba(0,123,255,0.2); }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>📱 Мобильная версия готова!</h1>
+        
+        <div class="status success">
+            ✅ Мобильная адаптация завершена
+        </div>
+        
+        <div class="instructions">
+            <h3>🎯 Что было сделано:</h3>
+            <ul class="feature-list">
+                <li>📱 Нижняя навигация для мобильных</li>
+                <li>📏 Адаптивные размеры и отступы</li>
+                <li>🔄 Fullscreen модальные окна</li>
+                <li>👆 Touch-friendly кнопки</li>
+                <li>📱 Safe area для iOS</li>
+                <li>🎨 Компактные карточки</li>
+                <li>⚡ Быстрые действия на главной</li>
+                <li>📈 Мини-топ игроков</li>
+                <li>📋 История последних действий</li>
+            </ul>
+        </div>
+        
+        <div class="status info">
+            💻 ПК версия осталась без изменений
+        </div>
+        
+        <div class="device-frame">
+            <iframe src="index.html" class="device-screen"></iframe>
+        </div>
+        
+        <div class="instructions">
+            <h3>🧪 Как тестировать:</h3>
+            <ul class="feature-list">
+                <li>Откройте index.html в браузере</li>
+                <li>Включите режим разработчика (F12)</li>
+                <li>Переключитесь на мобильное устройство</li>
+                <li>Или измените размер окна до 768px</li>
+            </ul>
+        </div>
+        
+        <div class="status success">
+            🚀 Готово к использованию!
+        </div>
+    </div>
+</body>
+</html>

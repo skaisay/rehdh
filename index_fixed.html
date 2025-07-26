@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats Tracker PWA</title>
+    <meta name="description" content="Персональный трекер статистики игроков">
+    
+    <!-- Cache busting -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- PWA Theme Colors - для интеграции с системой Windows -->
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#161b22" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d1117">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stats Tracker">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stats Tracker">
+    
+    <!-- Windows PWA Integration -->
+    <meta name="msapplication-TileColor" content="#0d1117">
+    <meta name="msapplication-navbutton-color" content="#0d1117">
+    <meta name="msapplication-starturl" content="/">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Drag region for window controls overlay -->
+    <div class="titlebar-drag-region" id="titlebar-drag-region"></div>
+    
+    <div class="app-container">
+        <!-- Side Navigation -->
+        <nav class="glass-nav sidebar">
+            <div class="nav-content">
+                <div class="nav-item active" data-tab="home" title="Главная">
+                    <svg viewBox="0 0 24 24" class="nav-icon">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 1.16.21 2.34.21 3.5 0 5.16-1 9-5.45 9-11V7l-10-5z"/>
+                    </svg>
+                    <span>Главная</span>
+                </div>
+                <div class="nav-item" data-tab="players" title="Игроки">
+                    <svg viewBox="0 0 24 24" class="nav-icon">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>Игроки</span>
+                </div>
+                <div class="nav-item" data-tab="stats" title="Статистика">
+                    <svg viewBox="0 0 24 24" class="nav-icon">
+                        <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+                    </svg>
+                    <span>Статистика</span>
+                </div>
+                <div class="nav-item" data-tab="settings" title="Настройки">
+                    <svg viewBox="0 0 24 24" class="nav-icon">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    <span>Настройки</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Tab -->
+            <div class="tab-content active" id="home">
+                <div class="glass-card welcome-card">
+                    <h1 class="welcome-title">Персональные заметки</h1>
+                    <p class="welcome-subtitle">Ведите учёт статистики и достижений</p>
+                    
+                    <!-- Quick Add Player -->
+                    <div class="quick-add-section">
+                        <div class="quick-add-form">
+                            <input type="text" id="quick-nickname" class="glass-input" placeholder="Поиск или добавить никнейм">
+                            <button class="glass-button primary" id="quick-add-btn">
+                                <svg viewBox="0 0 24 24" class="button-icon">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                </svg>
+                                Добавить
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-overview">
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-players">0</div>
+                            <div class="stat-label">Игроков</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-kills">0</div>
+                            <div class="stat-label">Убийств</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-deaths">0</div>
+                            <div class="stat-label">Смертей</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-time">0</div>
+                            <div class="stat-label">Часов</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players Tab -->
+            <div class="tab-content" id="players">
+                <!-- Players Header -->
+                <div class="players-page-header">
+                    <h1><svg style="width:24px;height:24px;fill:currentColor;vertical-align:middle;" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63c-.34-1.02-1.3-1.73-2.39-1.73H13.5c-.87 0-1.66.46-2.1 1.2l-2.75 4.61c-.16.26-.25.55-.25.85 0 .83.67 1.5 1.5 1.5.22 0 .42-.05.6-.14L12.5 12H15v10h1zm-12.5-11c.83 0 1.5-.67 1.5-1.5S8.33 9 7.5 9 6 9.67 6 11s.67 1.5 1.5 1.5zm1.5 1h-3C5.01 12 4 13.01 4 14.5V16h8v-1.5C12 13.01 10.99 12 9.5 12z"/></svg> Игроки</h1>
+                    <button class="glass-button primary" id="add-player-btn">
+                        <svg viewBox="0 0 24 24" class="button-icon">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        Добавить игрока
+                    </button>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="players-filter-section">
+                    <div class="players-filter-buttons">
+                        <button class="players-filter-btn active" data-sort="name">По имени</button>
+                        <button class="players-filter-btn" data-sort="kills">По убийствам</button>
+                        <button class="players-filter-btn" data-sort="deaths">По смертям</button>
+                        <button class="players-filter-btn" data-sort="time">По времени</button>
+                        <button class="players-filter-btn" data-sort="date">По дате</button>
+                    </div>
+                </div>
+
+                <!-- Players Grid -->
+                <div class="players-cards-grid" id="players-cards-grid">
+                    <!-- Player cards will be populated here -->
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-content" id="stats">
+                <!-- Stats Header -->
+                <div class="stats-page-header">
+                    <h1><svg style="width:24px;height:24px;fill:currentColor;vertical-align:middle;" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> Статистика игроков</h1>
+                    <p>Анализ эффективности и прогресса</p>
+                </div>
+
+                <!-- Main Stats Layout -->
+                <div class="stats-main-layout">
+                    <!-- Left Column: Top-5 and Filter Buttons -->
+                    <div class="stats-left-column">
+                        <!-- Filter Buttons -->
+                        <div class="stats-filter-buttons">
+                            <button class="filter-btn active" data-filter="kills">Убийства</button>
+                            <button class="filter-btn" data-filter="deaths">Смерти</button>
+                            <button class="filter-btn" data-filter="time">Время</button>
+                            <button class="filter-btn" data-filter="kd">K/D</button>
+                        </div>
+
+                        <!-- Top-5 Players -->
+                        <div class="top-5-section">
+                            <h2><svg style="width:20px;height:20px;fill:currentColor;vertical-align:middle;" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5-1L12 8l3.5-4L21 5l-2 11H5zm2.7-2h8.6l.9-5.4-2.1-.4L12 12l-3.1-3.8-2.1.4L7.7 14z"/></svg> Топ-5 игроков</h2>
+                            <div class="top-5-list" id="top-5-list">
+                                <!-- Top 5 players will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Player Cards -->
+                    <div class="stats-right-column">
+                        <h2><svg style="width:20px;height:20px;fill:currentColor;vertical-align:middle;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Игрок Убийства</h2>
+                        <div class="featured-players-grid" id="featured-players-grid">
+                            <!-- Featured player cards will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overall Stats -->
+                <div class="overall-stats-section">
+                    <h2>Общая статистика</h2>
+                    <div class="overall-stats-grid">
+                        <div class="overall-stat-card">
+                            <div class="stat-number" id="total-players-stat">0</div>
+                            <div class="stat-label">ИГРОКОВ</div>
+                        </div>
+                        <div class="overall-stat-card">
+                            <div class="stat-number" id="total-kills-stat">0</div>
+                            <div class="stat-label">УБИЙСТВ</div>
+                        </div>
+                        <div class="overall-stat-card">
+                            <div class="stat-number" id="total-deaths-stat">0</div>
+                            <div class="stat-label">СМЕРТЕЙ</div>
+                        </div>
+                        <div class="overall-stat-card">
+                            <div class="stat-number" id="total-time-stat">0</div>
+                            <div class="stat-label">ВРЕМЕНИ</div>
+                        </div>
+                        <div class="overall-stat-card">
+                            <div class="stat-number" id="total-time-stat">0</div>
+                            <div class="stat-label">ВРЕМЕНИ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Stats Modal -->
+                <div class="detailed-stats-overlay" id="detailed-stats-modal" style="display: none;">
+                    <div class="detailed-stats-modal glass-card">
+                        <div class="modal-header">
+                            <h3 id="detailed-player-name">Детальная статистика</h3>
+                            <button class="close-button" id="close-detailed-stats">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="detailed-stats-content" class="detailed-stats-content">
+                            <!-- Detailed stats content will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <!-- Background Settings -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Фон приложения</h2>
+                    </div>
+                    
+                    <div class="background-options">
+                        <div class="bg-option" data-bg="https://i.postimg.cc/XJkg1VB3/a-gift-for-you-bocchi-the-rock-thumb.jpg">
+                            <img src="https://i.postimg.cc/XJkg1VB3/a-gift-for-you-bocchi-the-rock-thumb.jpg" alt="Bocchi the Rock">
+                            <span>Bocchi the Rock</span>
+                        </div>
+                        <div class="bg-option" data-bg="https://i.postimg.cc/pdNMQZt8/korus-beachside-cafe-thumb.jpg">
+                            <img src="https://i.postimg.cc/pdNMQZt8/korus-beachside-cafe-thumb.jpg" alt="Beach Cafe">
+                            <span>Beach Cafe</span>
+                        </div>
+                        <div class="bg-option" data-bg="https://i.postimg.cc/YSV8Zp3m/field-of-daisies-thumb.jpg">
+                            <img src="https://i.postimg.cc/YSV8Zp3m/field-of-daisies-thumb.jpg" alt="Field of Daisies">
+                            <span>Поле ромашек</span>
+                        </div>
+                        <div class="bg-option" data-bg="https://i.postimg.cc/dVVB07Ny/luffy-clouds-one-piece-thumb.jpg">
+                            <img src="https://i.postimg.cc/dVVB07Ny/luffy-clouds-one-piece-thumb.jpg" alt="Luffy One Piece">
+                            <span>One Piece</span>
+                        </div>
+                        <div class="bg-option" data-bg="https://i.postimg.cc/g0fq4gzV/black-cat-sakura-thumb.jpg">
+                            <img src="https://i.postimg.cc/g0fq4gzV/black-cat-sakura-thumb.jpg" alt="Black Cat Sakura">
+                            <span>Кот сакура</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container Resize Settings -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Размеры контейнеров</h2>
+                    </div>
+                    
+                    <div class="resize-controls">
+                        <button class="glass-button secondary" id="toggle-resize-mode">
+                            <svg viewBox="0 0 24 24" class="button-icon">
+                                <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7.27C13.4,7.61 14.26,8.15 14.26,8.15C14.79,8.68 15.58,8.68 16.11,8.15C16.64,7.62 16.64,6.83 16.11,6.3L15.27,5.46C15.61,5.06 16.74,4 16.74,4C17.27,3.47 18.06,3.47 18.59,4C19.12,4.53 19.12,5.32 18.59,5.85L17.73,6.69C18.07,7.03 19.15,8.15 19.15,8.15C19.68,8.68 19.68,9.47 19.15,10C18.62,10.53 17.83,10.53 17.3,10L16.46,9.16C16.1,9.5 15,10.63 15,10.63C14.47,11.16 13.68,11.16 13.15,10.63C12.62,10.1 12.62,9.31 13.15,8.78L14,7.92C13.74,7.58 13,6.84 13,6.84V18.16C13,18.16 13.74,17.42 14,17.08L13.15,16.22C12.62,15.69 12.62,14.9 13.15,14.37C13.68,13.84 14.47,13.84 15,14.37C15,14.37 16.1,15.5 16.46,15.84L17.3,15C17.83,14.47 18.62,14.47 19.15,15C19.68,15.53 19.68,16.32 19.15,16.85C19.15,16.85 18.07,17.97 17.73,18.31L18.59,19.15C19.12,19.68 19.12,20.47 18.59,21C18.06,21.53 17.27,21.53 16.74,21C16.74,21 15.61,19.94 15.27,19.54L16.11,18.7C16.64,18.17 16.64,17.38 16.11,16.85C15.58,16.32 14.79,16.32 14.26,16.85C14.26,16.85 13.4,17.39 13,17.73V19.27C13.6,19.61 14,20.26 14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21C10,20.26 10.4,19.61 11,19.27V17.73C10.6,17.39 9.74,16.85 9.74,16.85C9.21,16.32 8.42,16.32 7.89,16.85C7.36,17.38 7.36,18.17 7.89,18.7L8.73,19.54C8.39,19.94 7.26,21 7.26,21C6.73,21.53 5.94,21.53 5.41,21C4.88,20.47 4.88,19.68 5.41,19.15L6.27,18.31C5.93,17.97 4.85,16.85 4.85,16.85C4.32,16.32 4.32,15.53 4.85,15C5.38,14.47 6.17,14.47 6.7,15L7.54,15.84C7.9,15.5 9,14.37 9,14.37C9.53,13.84 10.32,13.84 10.85,14.37C11.38,14.9 11.38,15.69 10.85,16.22L10,17.08C10.26,17.42 11,18.16 11,18.16V6.84C11,6.84 10.26,7.58 10,7.92L10.85,8.78C11.38,9.31 11.38,10.1 10.85,10.63C10.32,11.16 9.53,11.16 9,10.63C9,10.63 7.9,9.5 7.54,9.16L6.7,10C6.17,10.53 5.38,10.53 4.85,10C4.32,9.47 4.32,8.68 4.85,8.15C4.85,8.15 5.93,7.03 6.27,6.69L5.41,5.85C4.88,5.32 4.88,4.53 5.41,4C5.94,3.47 6.73,3.47 7.26,4C7.26,4 8.39,5.06 8.73,5.46L7.89,6.3C7.36,6.83 7.36,7.62 7.89,8.15C8.42,8.68 9.21,8.68 9.74,8.15C9.74,8.15 10.6,7.61 11,7.27V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2Z"/>
+                            </svg>
+                            Режим изменения размеров
+                        </button>
+                        <button class="glass-button primary" id="save-resize-changes" style="display: none;">
+                            <svg viewBox="0 0 24 24" class="button-icon">
+                                <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                            </svg>
+                            Сохранить изменения
+                        </button>
+                    </div>
+                    <p class="resize-hint" style="display: none;">Наведите курсор на края контейнеров для изменения размеров</p>
+                </div>
+                    
+                <!-- App Settings -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Приложение</h2>
+                    </div>
+                    
+                    <div class="app-controls">
+                        <button class="glass-button primary" id="install-app" style="display: none;">
+                            <svg viewBox="0 0 24 24" class="button-icon">
+                                <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+                            </svg>
+                            Установить приложение
+                        </button>
+                        <div class="app-status" id="app-status">
+                            Приложение готово к установке
+                        </div>
+                        <div class="shortcut-info">
+                            <div class="shortcut-item">
+                                <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> - Сделать скриншот
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding/editing players -->
+    <div class="modal-overlay" id="player-modal">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Добавить игрока</h3>
+                <button class="close-button" id="close-modal">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="player-form" class="modal-form">
+                <div class="form-group">
+                    <label for="player-nickname">Никнейм игрока</label>
+                    <input type="text" id="player-nickname" class="glass-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-kills">Убийства</label>
+                    <input type="number" id="player-kills" class="glass-input" min="0" value="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-deaths">Смерти</label>
+                    <input type="number" id="player-deaths" class="glass-input" min="0" value="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-time">Время игры (часы)</label>
+                    <input type="number" id="player-time" class="glass-input" min="0" step="0.1" value="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-screenshot">Скриншот</label>
+                    <input type="file" id="player-screenshot" class="glass-input" accept="image/*">
+                    <div id="screenshot-preview" class="screenshot-preview"></div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="glass-button secondary" id="cancel-button">Отмена</button>
+                    <button type="submit" class="glass-button primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Немедленная проверка и перенаправление если нужно
+        (function() {
+            // Проверяем, есть ли элементы приложения на странице
+            function checkAppElements() {
+                return document.querySelector('.app-container') && 
+                       document.querySelector('.glass-nav') && 
+                       document.querySelector('.main-content');
+            }
+            
+            // Если элементы не найдены, перенаправляем
+            if (!checkAppElements()) {
+                console.log('App elements not found, redirecting...');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Принудительная очистка кэша и регистрация SW
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister();
+                    }
+                    // Регистрируем заново
+                    navigator.serviceWorker.register('sw.js', { scope: './' }).then(function(registration) {
+                        console.log('SW registered:', registration);
+                    }).catch(function(error) {
+                        console.log('SW registration failed:', error);
+                    });
+                });
+            }
+        })();
+    </script>
+    <script src="app-optimized.js"></script>
+</body>
+</html>
